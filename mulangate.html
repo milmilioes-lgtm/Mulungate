@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Mulangate — Tradutor de Línguas Nacionais de Moçambique</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{-webkit-tap-highlight-color:transparent}body{font-family:Inter,system-ui,sans-serif}
+.capulana{background-color:#007a3d;background-image:radial-gradient(#f2a900 1.5px,transparent 1.5px),radial-gradient(#d21034 1.5px,#007a3d 1.5px);background-size:60px 60px;background-position:0 0,30px 30px;opacity:.045}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:99px}
+</style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+<div class="fixed inset-0 capulana pointer-events-none"></div>
+<div class="relative min-h-screen max-w-md mx-auto bg-white dark:bg-slate-950 shadow-2xl">
+<header class="sticky top-0 z-30 bg-gradient-to-r from-emerald-800 via-emerald-700 to-green-900 text-white px-4 py-3 flex items-center justify-between shadow-md">
+ <div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-amber-400 flex items-center justify-center text-lg">🇲🇿</div>
+ <div><h1 class="font-bold leading-none">Mulangate</h1><p class="text-[10px] text-emerald-200">Línguas Nacionais de Moçambique</p></div></div>
+ <div class="flex gap-1"><button id="soundBtn" class="p-2"><i class="fa-solid fa-volume-high"></i></button><button id="themeBtn" class="p-2"><i class="fa-solid fa-moon"></i></button><button id="infoBtn" class="p-2"><i class="fa-solid fa-circle-info"></i></button></div>
+</header>
+
+<main id="main" class="pb-24 p-3 space-y-4">
+<section class="rounded-2xl p-3.5 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
+ <div class="flex justify-between"><b class="text-xs text-amber-700 dark:text-amber-300 uppercase">✨ Frase do Dia</b><span id="podLang" class="text-[10px] bg-amber-200 dark:bg-amber-900 px-2 rounded-full">Xichangana</span></div>
+ <p id="podText" class="font-bold text-lg mt-1">Avuxeni! Kunjhani?</p>
+ <p id="podTr" class="text-xs italic text-slate-600 dark:text-slate-300">Tradução: Bom dia! Como vai?</p>
+ <div class="flex justify-between text-[11px] pt-1"><span id="podPron">Pronúncia: a-vu-she-ni kun-ja-ni</span><button id="podSpeak"><i class="fa-solid fa-volume-high"></i></button></div>
+</section>
+
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+<div class="flex items-center p-2.5 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+ <div class="flex-1"><label class="block text-[10px] text-slate-400 uppercase">De</label><select id="src" class="w-full bg-transparent font-semibold outline-none text-sm">
+  <option value="pt">Português</option><option value="xichangana">Xichangana</option><option value="cisena">Cisena</option><option value="emakhuwa">Emakhuwa</option><option value="ciyaao">Ciyaao</option><option value="cimaconde">Cimaconde</option><option value="cinyanja">Cinyanja</option><option value="cindau">Cindau</option><option value="citronga">Citronga</option><option value="xitswa">Xitswa</option>
+ </select></div>
+ <button id="swap" class="mx-2 p-2 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
+ <div class="flex-1 text-right"><label class="block text-[10px] text-slate-400 uppercase">Para</label><select id="dst" class="w-full bg-transparent font-semibold outline-none text-sm text-emerald-700 dark:text-amber-400">
+  <option value="xichangana">Xichangana</option><option value="cisena">Cisena</option><option value="emakhuwa">Emakhuwa</option><option value="ciyaao">Ciyaao</option><option value="cimaconde">Cimaconde</option><option value="cinyanja">Cinyanja</option><option value="cindau">Cindau</option><option value="citronga">Citronga</option><option value="xitswa">Xitswa</option><option value="pt">Português</option>
+ </select></div>
+</div>
+<div class="p-3.5 border-b border-slate-100 dark:border-slate-800">
+ <textarea id="input" rows="3" maxlength="200" placeholder="Digite uma palavra ou frase..." class="w-full bg-transparent resize-none outline-none text-base"></textarea>
+ <div class="flex justify-between items-center text-xs text-slate-400"><div class="flex gap-1">
+  <button id="mic" class="p-2"><i class="fa-solid fa-microphone"></i></button><button id="clear" class="p-2 hidden"><i class="fa-solid fa-xmark"></i></button>
+ </div><span id="counter">0/200</span></div>
+</div>
+<div class="p-3.5 bg-emerald-50/50 dark:bg-slate-900/70">
+ <div class="flex justify-between"><span id="badge" class="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 px-2 py-1 rounded">XICHANGANA</span>
+ <div class="flex gap-1"><button id="copy" class="p-1.5" title="Copiar"><i class="fa-regular fa-copy"></i></button><button id="fav" class="p-1.5" title="Guardar"><i class="fa-regular fa-bookmark"></i></button><button id="speak" class="p-1.5 text-emerald-700" title="Ouvir"><i class="fa-solid fa-volume-high"></i></button></div></div>
+ <div id="output" class="text-lg font-bold my-2 min-h-7"><span class="text-slate-400 text-sm italic font-normal">A tradução aparecerá aqui...</span></div>
+ <div id="phoneticBox" class="hidden border-t border-emerald-100 dark:border-slate-800 pt-2 text-xs"><span class="text-slate-400">Guia fónico: </span><b id="phonetic"></b></div>
+</div>
+</section>
+
+<section>
+<div class="flex justify-between mb-2"><h2 class="text-xs font-bold uppercase text-slate-500">⚡ Frases rápidas</h2><span class="text-[10px] text-slate-400">Toque para traduzir</span></div>
+<div id="cats" class="flex gap-1.5 overflow-x-auto pb-1"></div><div id="phrases" class="grid grid-cols-2 gap-2 mt-2"></div>
+</section>
+
+<section class="rounded-2xl border border-slate-200 dark:border-slate-800 p-3.5">
+<div class="flex justify-between"><b class="text-xs uppercase">📍 Região da língua</b><b id="regionName" class="text-xs text-emerald-700 dark:text-amber-400">Xichangana</b></div>
+<div class="mt-2 bg-slate-50 dark:bg-slate-900 p-2.5 rounded-xl text-xs"><b id="regionProv">Maputo, Gaza e Inhambane</b><p id="regionDesc" class="text-slate-500 mt-1">Língua bantu do grupo Tswa-Ronga, muito usada no sul de Moçambique.</p></div>
+</section>
+</main>
+
+<nav class="fixed bottom-0 z-30 w-full max-w-md bg-white/95 dark:bg-slate-900/95 backdrop-blur border-t border-slate-200 dark:border-slate-800 flex justify-around py-2">
+<button id="navTranslate" class="text-emerald-700 dark:text-amber-400 text-xs font-semibold"><i class="fa-solid fa-language text-lg block"></i>Traduzir</button>
+<button id="navHistory" class="text-slate-400 text-xs"><i class="fa-solid fa-clock-rotate-left text-lg block"></i>Histórico</button>
+<button id="navFavs" class="text-slate-400 text-xs"><i class="fa-solid fa-star text-lg block"></i>Guardados</button>
+</nav>
+
+<div id="modal" class="fixed inset-0 z-50 bg-black/60 hidden">
+ <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white dark:bg-slate-900 p-4 overflow-y-auto">
+  <div class="flex justify-between items-center"><h2 id="modalTitle" class="font-bold text-lg">Histórico</h2><button id="close" class="p-2"><i class="fa-solid fa-xmark"></i></button></div>
+  <div id="modalBody" class="mt-4 space-y-2"></div>
+ </div>
+</div>
+</div>
+
+<script>
+const DB={
+xichangana:{name:"Xichangana",prov:"Maputo, Gaza e Inhambane",desc:"Língua bantu do grupo Tswa-Ronga, muito usada no sul de Moçambique.",
+pt:{
+"bom dia":"Avuxeni","boa tarde":"Inhlikanhi","boa noite":"Rivusiku lerinene","olá":"Avuxeni","oi":"Avuxeni","obrigado":"Inkomu","obrigada":"Inkomu","por favor":"Ndza kombela","sim":"Ina","não":"E-e","água":"mati","comida":"swakudya","casa":"yindlu","amigo":"munghana","amiga":"munghana","como vai":"Kunjhani?","como está":"Kunjhani?","estou bem":"Ndza hanya kahle","meu nome é":"Vito ra mina i","até logo":"Hi ta tlhela hi vonana","desculpa":"Ndza rivalela","ajuda":"Mpfuno","socorro":"Mpfuno!"
+},
+pron:{
+"Avuxeni":"a-vu-she-ni","Inkomu":"in-ko-mu","Kunjhani?":"kun-ja-ni","Ndza hanya kahle":"ndza ha-nya ka-hle","Mati":"ma-ti","Mpfuno":"mpfu-no"
+}},
+cisena:{name:"Cisena",prov:"Sofala, Tete, Zambézia e Manica",desc:"Língua bantu falada sobretudo nas regiões do vale do Zambeze.",pt:{"bom dia":"Mwauka bwanji","olá":"Mwauka bwanji","obrigado":"Zikomo","obrigada":"Zikomo","água":"madzi","sim":"Inde","não":"Ai","como vai":"Muli tani","estou bem":"Ndili bwino"}},
+emakhuwa:{name:"Emakhuwa",prov:"Nampula, Cabo Delgado, Niassa e Zambézia",desc:"Uma das principais línguas bantu do norte de Moçambique.",pt:{"bom dia":"Mwaramutse","olá":"Mwaramutse","obrigado":"Khanle","obrigada":"Khanle","água":"maasi","sim":"Ehee","não":"Aha","como vai":"Muli khoni","estou bem":"Kihaya"}},
+ciyaao:{name:"Ciyaao",prov:"Niassa, Cabo Delgado e partes de Nampula e Zambézia",desc:"Língua bantu associada ao povo Yao.",pt:{"bom dia":"Mwauka uli","olá":"Mwauka","obrigado":"Asante","água":"maji","sim":"Eya","não":"Ngawa","como vai":"Muli uli"}},
+cimaconde:{name:"Cimaconde",prov:"Cabo Delgado e áreas do norte",desc:"Língua bantu falada principalmente no norte de Moçambique.",pt:{"bom dia":"Mwayuka","olá":"Mwayuka","obrigado":"Nashukuru","água":"maji","sim":"Ee","não":"Aha"}},
+cinyanja:{name:"Cinyanja",prov:"Tete e áreas do centro/noroeste",desc:"Língua bantu também conhecida como Nyanja.",pt:{"bom dia":"Mwauka bwanji","olá":"Moni","obrigado":"Zikomo","água":"madzi","sim":"Inde","não":"Ayi","como vai":"Muli bwanji","estou bem":"Ndili bwino"}},
+cindau:{name:"Cindau",prov:"Sofala, Manica e áreas vizinhas",desc:"Língua bantu falada sobretudo no centro de Moçambique.",pt:{"bom dia":"Mangwanani","olá":"Makadini","obrigado":"Tatenda","água":"mási","sim":"Ehe","não":"Hai"}},
+citronga:{name:"Citronga",prov:"Maputo e áreas do sul",desc:"Língua do grupo Tswa-Ronga, relacionada linguisticamente com Xichangana.",pt:{"bom dia":"Avuxeni","olá":"Avuxeni","obrigado":"Inkomu","água":"mati","sim":"Ina","não":"E-e","como vai":"Kunjhani?"}},
+xitswa:{name:"Xitswa",prov:"Inhambane e áreas do sul",desc:"Língua bantu do grupo Tswa-Ronga, especialmente presente em Inhambane.",pt:{"bom dia":"Avuxeni","olá":"Avuxeni","obrigado":"Inkomu","água":"mati","sim":"Ina","não":"E-e","como vai":"Kunjhani?"}}
+};
+
+const cats={greetings:["bom dia","olá","como vai","obrigado","por favor"],daily:["água","comida","casa","amigo","sim","não"],emergency:["ajuda","socorro"],numbers:["um","dois","três","quatro","cinco"],family:["mãe","pai","irmão","irmã","filho"]};
+const num={xichangana:{um:"n'we",dois:"mambirhi",três:"nharhu",quatro:"mune",cinco:"ntlhanu"},cisena:{um:"cimoza",dois:"ziwiri",três:"zitatu",quatro:"zinayi",cinco:"zisanu"}};
+let history=JSON.parse(localStorage.getItem("mulangate_history")||"[]"), favs=JSON.parse(localStorage.getItem("mulangate_favs")||"[]"), sound=localStorage.getItem("mulangate_sound")!=="0";
+
+const $=id=>document.getElementById(id), norm=s=>s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+function name(code){return code==="pt"?"Português":DB[code]?.name||code}
+function translateWord(text,src,dst){
+ if(!text.trim()) return {text:"",phon:""};
+ if(src===dst) return {text:text.trim(),phon:""};
+ let n=norm(text), result=null;
+ if(src==="pt"){
+   result=DB[dst]?.pt[n] || num[dst]?.[n];
+ }else if(dst==="pt"){
+   const map=DB[src]?.pt||{}; result=Object.keys(map).find(k=>norm(map[k])===n)||Object.keys(map).find(k=>norm(map[k]).includes(n));
+ }else{
+   const pt=translateWord(text,src,"pt").text;
+   result=translateWord(pt,"pt",dst).text;
+ }
+ if(!result){
+   // Match punctuation/case and individual words where possible
+   if(src==="pt" && DB[dst]){
+    result=text.split(/(\s+|[,.!?;:])/).map(x=>DB[dst].pt[norm(x)]||x).join("");
+   }else result="Não encontrei esta expressão na base de dados.";
+ }
+ let phon=(DB[dst]?.pron?.[result])||"";
+ return {text:result,phon};
+}
+function doTranslate(push=true){
+ const val=$("input").value, src=$("src").value,dst=$("dst").value;
+ $("counter").textContent=val.length+"/200"; $("clear").classList.toggle("hidden",!val);
+ $("badge").textContent=name(dst).toUpperCase();
+ const r=translateWord(val,src,dst);
+ $("output").innerHTML=r.text?escapeHtml(r.text):'<span class="text-slate-400 text-sm italic font-normal">A tradução aparecerá aqui...</span>';
+ $("phoneticBox").classList.toggle("hidden",!r.phon);$("phonetic").textContent=r.phon;
+ if(push&&val.trim()&&r.text&&r.text!=="Não encontrei esta expressão na base de dados."){
+   history.unshift({input:val,output:r.text,src,dst,time:new Date().toLocaleString()});history=history.slice(0,50);localStorage.setItem("mulangate_history",JSON.stringify(history));
+ }
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function speak(text,lang){
+ if(!text)return;
+ if(!("speechSynthesis"in window)){alert("O seu navegador não suporta síntese de voz.");return}
+ if(!sound)return;
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text); u.lang=lang==="pt"?"pt-PT":"en-US";u.rate=.82;speechSynthesis.speak(u);
+}
+function renderCats(){
+ $("cats").innerHTML=Object.entries({greetings:"👋 Saudações",daily:"💬 Cotidiano",emergency:"🚨 Emergência",numbers:"🔢 Números",family:"👨‍👩‍👧 Família"}).map(([k,v])=>`<button data-cat="${k}" class="cat px-3 py-1.5 rounded-full whitespace-nowrap text-xs bg-slate-100 dark:bg-slate-800">${v}</button>`).join("");
+ document.querySelectorAll(".cat").forEach((b,i)=>b.onclick=()=>renderPhrases(b.dataset.cat));
+ renderPhrases("greetings");
+}
+function renderPhrases(cat){
+ $("phrases").innerHTML=(cats[cat]||[]).map(p=>`<button class="phrase text-left p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-emerald-400">${p}</button>`).join("");
+ document.querySelectorAll(".phrase").forEach(b=>b.onclick=()=>{$("input").value=b.textContent;doTranslate();$("main").scrollTo({top:0,behavior:"smooth"})});
+}
+function openModal(title,body){$("modalTitle").textContent=title;$("modalBody").innerHTML=body||'<p class="text-sm text-slate-400">Nada guardado.</p>';$("modal").classList.remove("hidden")}
+function listItems(arr,type){
+ return arr.length?arr.map((x,i)=>`<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 text-sm"><b>${escapeHtml(x.input)}</b><div class="text-emerald-700 dark:text-amber-400 mt-1">${escapeHtml(x.output)}</div><div class="text-[10px] text-slate-400 mt-1">${name(x.src)} → ${name(x.dst)} ${x.time?"· "+x.time:""}</div>${type==="fav"?`<button onclick="removeFav(${i})" class="text-[10px] text-red-500 mt-2">Remover</button>`:""}</div>`).join(""):'<p class="text-sm text-slate-400">Ainda não há itens.</p>';
+}
+window.removeFav=i=>{favs.splice(i,1);localStorage.setItem("mulangate_favs",JSON.stringify(favs));openModal("Guardados",listItems(favs,"fav"))};
+
+$("input").addEventListener("input",()=>doTranslate(false));
+$("src").onchange=$("dst").onchange=()=>{doTranslate(false);updateRegion()};
+$("swap").onclick=()=>{let a=$("src").value;$("src").value=$("dst").value;$("dst").value=a;doTranslate(false);updateRegion()};
+$("clear").onclick=()=>{$("input").value="";doTranslate(false)};
+$("copy").onclick=async()=>{let t=$("output").innerText.trim();if(t&&!t.startsWith("A tradução")){await navigator.clipboard.writeText(t);$("copy").innerHTML='<i class="fa-solid fa-check text-emerald-600"></i>';setTimeout(()=>$("copy").innerHTML='<i class="fa-regular fa-copy"></i>',1000)}};
+$("fav").onclick=()=>{let t=$("input").value.trim(),o=$("output").innerText.trim();if(!t||!o||o.startsWith("A tradução"))return;favs.unshift({input:t,output:o,src:$("src").value,dst:$("dst").value,time:new Date().toLocaleString()});favs=favs.slice(0,50);localStorage.setItem("mulangate_favs",JSON.stringify(favs));$("fav").innerHTML='<i class="fa-solid fa-bookmark text-amber-500"></i>'};
+$("speak").onclick=()=>speak($("output").innerText,$("dst").value);$("podSpeak").onclick=()=>speak($("podText").textContent,"en-US");
+$("soundBtn").onclick=()=>{sound=!sound;localStorage.setItem("mulangate_sound",sound?"1":"0");$("soundBtn").innerHTML=`<i class="fa-solid ${sound?"fa-volume-high":"fa-volume-xmark"}"></i>`};
+$("themeBtn").onclick=()=>{document.documentElement.classList.toggle("dark");localStorage.setItem("mulangate_dark",document.documentElement.classList.contains("dark")?"1":"0")};
+$("infoBtn").onclick=()=>openModal("Sobre o Mulangate",`<div class="space-y-3 text-sm"><p><b>Mulangate</b> é um tradutor experimental focado em línguas nacionais de Moçambique.</p><p>As traduções desta versão são baseadas numa base linguística local incorporada no próprio HTML. Não depende de um servidor de tradução.</p><p class="text-amber-600">Nota: para tradução livre e ampla de frases, será necessária uma base linguística muito maior ou uma API/IA especializada.</p></div>`);
+$("close").onclick=()=>$("modal").classList.add("hidden");$("modal").onclick=e=>{if(e.target===$("modal"))$("modal").classList.add("hidden")};
+$("navHistory").onclick=()=>openModal("Histórico",listItems(history));
+$("navFavs").onclick=()=>openModal("Guardados",listItems(favs,"fav"));
+$("navTranslate").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+
+$("mic").onclick=()=>{
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){alert("Entrada por voz não é suportada neste navegador.");return}
+ const r=new SR();r.lang="pt-PT";r.interimResults=false;r.maxAlternatives=1;
+ $("mic").innerHTML='<i class="fa-solid fa-circle-notch fa-spin"></i>';
+ r.onresult=e=>{$("input").value=e.results[0][0].transcript;doTranslate(false)};
+ r.onerror=()=>alert("Não foi possível captar a voz.");
+ r.onend=()=>{$("mic").innerHTML='<i class="fa-solid fa-microphone"></i>'};r.start();
+};
+function updateRegion(){let d=DB[$("dst").value];if($("dst").value==="pt"){$("regionName").textContent="Português";$("regionProv").textContent="Moçambique";$("regionDesc").textContent="Português é a língua oficial de Moçambique."}else if(d){$("regionName").textContent=d.name;$("regionProv").textContent=d.prov;$("regionDesc").textContent=d.desc}}
+if(localStorage.getItem("mulangate_dark")==="1")document.documentElement.classList.add("dark");
+renderCats();updateRegion();
+</script>
+</body>
+</html>
